@@ -6,14 +6,12 @@ export const useUserDB = () => {
   const { add, update, getAll, getById, deleteRecord } =
     useIndexedDB(USER_STORE);
 
-  const addUser = async (userData) => {
+  const checkIfEmailExists = async (email) => {
     try {
-      const id = await add(userData);
-      console.log("user added successfull", id);
-      return id;
+      const users = await getAll();
+      return users.some((user) => user.email === email);
     } catch (error) {
-      console.error("Error adding user", error);
-      throw error;
+      throw new Error("Error checking email", error);
     }
   };
 
@@ -26,6 +24,21 @@ export const useUserDB = () => {
       throw error;
     }
   };
+
+ const addUser = async (userData) => {
+   // eslint-disable-next-line no-useless-catch
+   try {
+     const emailExists = await checkIfEmailExists(userData.email);
+     if (emailExists) {
+       throw new Error("Email already exists");
+     }
+     const id = await add(userData);
+     console.log("User added successfully", id);
+     return id;
+   } catch (error) {
+     throw error;  
+   }
+ };
 
   return { addUser, getAllUsers };
 };

@@ -4,6 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useUserDB } from "../../utils/db";
 import bcrypt from "bcryptjs";
+import toast from "react-hot-toast";
 
 const schema = yup.object().shape({
   email: yup
@@ -41,9 +42,9 @@ const Login = () => {
         throw new Error("Incorrect password");
       }
 
-      console.log("Login successful");
+      toast.success("Login successful");
     } catch (error) {
-      console.log("Error logging in:", error);
+      toast.error(error.message);
     }
   };
 

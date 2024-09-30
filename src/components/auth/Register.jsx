@@ -4,6 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import bcrypt from "bcryptjs";
 import { useUserDB } from "../../utils/db";
+import toast from "react-hot-toast";
 
 const schema = yup.object().shape({
   username: yup.string().required("Username is required"),
@@ -34,22 +35,23 @@ const Register = () => {
   const { addUser } = useUserDB();
 
   // The onSubmit is used to add user to the database
-  const onSubmit = async (data) => {
-    try {
-      const hashedPassword = await bcrypt.hash(data.password, 10);
-      const userData = {
-        username: data.username,
-        email: data.email,
-        password: hashedPassword,
-        isBlocked: false,
-        lastLogin: new Date().toISOString(),
-      };
-      const response = await addUser(userData);
-      console.log(response, "response");
-    } catch (error) {
-      console.error("Error adding user", error);
-    }
-  };
+ const onSubmit = async (data) => {
+   try {
+     const hashedPassword = await bcrypt.hash(data.password, 10);
+     const userData = {
+       username: data.username,
+       email: data.email,
+       password: hashedPassword,
+       isBlocked: false,
+       lastLogin: new Date().toISOString(),
+     };
+     const response = await addUser(userData);
+     toast.success("User added successfully");
+     console.log(response, "response");
+   } catch (error) {
+     toast.error(error.message); 
+   }
+ };
 
   return (
     <div className="container mx-auto py-20 px-4 md:px-0">
