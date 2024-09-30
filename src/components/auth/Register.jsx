@@ -3,9 +3,7 @@ import { Link } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import bcrypt from "bcryptjs";
-import { useIndexedDB } from "react-indexed-db-hook";
 import { useUserDB } from "../../utils/db";
-
 
 const schema = yup.object().shape({
   username: yup.string().required("Username is required"),
@@ -32,9 +30,11 @@ const Register = () => {
     resolver: yupResolver(schema),
   });
 
-  const {addUser} = useUserDB();
+  //  The addUser is used to add user to the database
+  const { addUser } = useUserDB();
 
-  const onSubmit = async(data) => {
+  // The onSubmit is used to add user to the database
+  const onSubmit = async (data) => {
     try {
       const hashedPassword = await bcrypt.hash(data.password, 10);
       const userData = {
@@ -42,12 +42,12 @@ const Register = () => {
         email: data.email,
         password: hashedPassword,
         isBlocked: false,
-        lastLogin: new Date().toISOString()
-      }
+        lastLogin: new Date().toISOString(),
+      };
       const response = await addUser(userData);
-      console.log(response, "response")
+      console.log(response, "response");
     } catch (error) {
-      console.error("ERror adding user", error);
+      console.error("Error adding user", error);
     }
   };
 

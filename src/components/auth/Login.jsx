@@ -1,10 +1,11 @@
- 
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useUserDB } from "../../utils/db";
+import bcrypt from "bcryptjs";
 
- const schema = yup.object().shape({
+const schema = yup.object().shape({
   email: yup
     .string()
     .email("Must be a valid email")
@@ -24,8 +25,26 @@ const Login = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);  
+  const { getAllUsers } = useUserDB();
+  const onSubmit = async (data) => {
+    try {
+      const { email, password } = data;
+      const users = await getAllUsers();
+      //decrypt password
+      const user = users.find((user) => user.email === email);
+      if (!user) {
+        throw new Error("Invalid email");
+      }
+      const isPasswordMatch = await bcrypt.compare(password, user.password);
+
+      if (!isPasswordMatch) {
+        throw new Error("Incorrect password");
+      }
+
+      console.log("Login successful");
+    } catch (error) {
+      console.log("Error logging in:", error);
+    }
   };
 
   return (

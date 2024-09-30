@@ -17,5 +17,15 @@ export const useUserDB = () => {
     }
   };
 
-  return { addUser };
+  const getAllUsers = async () => {
+    try {
+      const users = await getAll();
+      return users;
+    } catch (error) {
+      console.error("Error getting all users:", error);
+      throw error;
+    }
+  };
+
+  return { addUser, getAllUsers };
 };
