@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import bcrypt from "bcryptjs";
@@ -23,6 +23,7 @@ const schema = yup.object().shape({
 });
 
 const Register = () => {
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -45,10 +46,10 @@ const Register = () => {
        isBlocked: false,
        lastLogin: new Date().toISOString(),
      };
-     const response = await addUser(userData);
+     await addUser(userData);
      toast.success("User added successfully");
-     console.log(response, "response");
-   } catch (error) {
+     navigate("/login")
+    } catch (error) {
      toast.error(error.message); 
    }
  };

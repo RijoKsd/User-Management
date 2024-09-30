@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useUserDB } from "../../utils/db";
@@ -18,6 +18,7 @@ const schema = yup.object().shape({
 });
 
 const Login = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -47,7 +48,11 @@ const Login = () => {
         throw new Error("User is blocked");
       }
 
+      // localstorage
+      localStorage.setItem("isLoggedIn", true);
+
       toast.success("Login successful");
+      navigate("/user");
     } catch (error) {
       toast.error(error.message);
     }

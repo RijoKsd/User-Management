@@ -5,6 +5,7 @@ import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import UserLayout from "./Layout/UserLayout";
 import UserManagement from "./components/user/UserManagement";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -15,13 +16,17 @@ const router = createBrowserRouter([
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
     ],
-  },{
+  },
+  {
     path: "/user",
-    element: <UserLayout />,
+    element: <ProtectedRoute />,
     children: [
-      { path: "", element: <UserManagement/> },
-    ]
-  }
+      {
+        element: <UserLayout />,
+        children: [{ path: "", element: <UserManagement /> }],
+      },
+    ],
+  },
 ]);
 
 export default router;

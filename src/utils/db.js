@@ -51,7 +51,13 @@ export const useUserDB = () => {
   };
 
   const updateUser = async (id, userData) => {
-   console.log(id, userData, "userData");
+    try {
+      await update({ id, ...userData });
+      console.log("User updated successfully");
+    } catch (error) {
+      console.error("Error updating user:", error);
+      throw error;
+    }
   };
 
   const deleteUser = async (id) => {
