@@ -7,6 +7,7 @@ import UserLayout from "./Layout/UserLayout";
 import UserManagement from "./components/user/UserManagement";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import EditUserForm from "./components/user/EditUserForm";
+import AddNewUser from "./components/user/AddNewUser";
 
 const router = createBrowserRouter([
   {
@@ -24,7 +25,9 @@ const router = createBrowserRouter([
     children: [
       {
         element: <UserLayout />,
-        children: [{ path: "", element: <UserManagement /> }],
+        children: [{ path: "", element: <UserManagement /> },
+          {path:"add", element: <AddNewUser />}
+        ],
       },
     ],
   },

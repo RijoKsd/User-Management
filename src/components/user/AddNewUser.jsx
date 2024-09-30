@@ -1,0 +1,132 @@
+import React from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import bcrypt from "bcryptjs";
+import { useUserDB } from "../../utils/db";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+
+const schema = yup.object().shape({
+  username: yup.string().required("Username is required"),
+  email: yup
+    .string()
+    .email("Must be a valid email")
+    .required("Email is required"),
+  password: yup
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .required("Password is required"),
+  location: yup.string().required("Location is required"),
+  jobTitle: yup.string().required("Job title is required"),
+});
+
+const AddNewUser = () => {
+    const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const { addUser } = useUserDB();
+
+  const onSubmit = async (data) => {
+    try {
+      const hashedPassword = await bcrypt.hash(data.password, 10);
+      const userData = {
+        username: data.username,
+        email: data.email,
+        password: hashedPassword,
+        location: data.location,
+        jobTitle: data.jobTitle,
+        isBlocked: false,
+        lastLogin: new Date().toISOString(),
+      };
+      await addUser(userData);
+      toast.success("User added successfully");
+      reset();  
+      navigate("/user");
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  return (
+    <div className="container mx-auto py-20 px-4 md:px-0">
+      <h2 className="text-3xl font-bold mb-6 text-center">Add New User</h2>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md"
+      >
+        <div className="mb-4">
+          <label className="block text-gray-700 mb-2">Username</label>
+          <input
+            type="text"
+            {...register("username")}
+            className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          {errors.username && (
+            <p className="text-red-500">{errors.username.message}</p>
+          )}
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 mb-2">Email</label>
+          <input
+            type="email"
+            {...register("email")}
+            className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          {errors.email && (
+            <p className="text-red-500">{errors.email.message}</p>
+          )}
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 mb-2">Location</label>
+          <input
+            type="text"
+            {...register("location")}
+            className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          {errors.location && (
+            <p className="text-red-500">{errors.location.message}</p>
+          )}
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 mb-2">Job Title</label>
+          <input
+            type="text"
+            {...register("jobTitle")}
+            className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          {errors.jobTitle && (
+            <p className="text-red-500">{errors.jobTitle.message}</p>
+          )}
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 mb-2">Password</label>
+          <input
+            type="password"
+            {...register("password")}
+            className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          {errors.password && (
+            <p className="text-red-500">{errors.password.message}</p>
+          )}
+        </div>
+
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
+        >
+          Add User
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default AddNewUser;
