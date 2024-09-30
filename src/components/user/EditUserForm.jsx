@@ -11,7 +11,7 @@ const schema = yup.object().shape({
   jobTitle: yup.string().required("Job title is required"),
 });
 
-const EditUserForm = ({ user, onClose }) => {
+const EditUserForm = ({ user, onClose, fetchUsers }) => {
   const { updateUser } = useUserDB();
   const {
     register,
@@ -30,7 +30,8 @@ const EditUserForm = ({ user, onClose }) => {
     try {
       await updateUser(user.id, data);
       toast.success("User updated successfully");
-       onClose();
+      onClose();
+      fetchUsers();
     } catch (error) {
       toast.error("Error updating user: " + error.message);
     }

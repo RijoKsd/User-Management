@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import EditUserForm from "./EditUserForm";
 
-const UserList = ({ user, onEdit, onDelete, onToggleBlock }) => {
+const UserList = ({ user, onEdit, onDelete, onToggleBlock, fetchUsers }) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const handleEditClick = () => {
@@ -13,14 +13,20 @@ const UserList = ({ user, onEdit, onDelete, onToggleBlock }) => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-300">
-      <div className="flex justify-between items-start mb-4">
-        <div>
-          <h2 className="text-xl font-semibold text-gray-800">
-            {user.username}
-          </h2>
-          <p className="text-sm text-gray-600">{user.email}</p>
-        </div>
+    <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <div className="mb-4">
+        <h2 className="text-xl font-bold">{user.username}</h2>
+        <p className="text-gray-600">{user.email}</p>
+      </div>
+      <div className="mb-4">
+        <p>
+          <strong>Location:</strong> {user.location}
+        </p>
+        <p>
+          <strong>Job Title:</strong> {user.jobTitle}
+        </p>
+      </div>
+      <div className="mb-4">
         <span
           className={`px-2 py-1 text-xs font-semibold rounded-full ${
             user.isBlocked
@@ -31,10 +37,10 @@ const UserList = ({ user, onEdit, onDelete, onToggleBlock }) => {
           {user.isBlocked ? "Blocked" : "Active"}
         </span>
       </div>
-      <p className="text-sm text-gray-500 mb-4">
-        Last Login: {new Date(user.lastLogin).toLocaleString()}
-      </p>
-      <div className="flex justify-between items-center">
+      <div className="mb-4">
+       Register Date: {new Date(user.lastLogin).toLocaleString()}
+      </div>
+      <div className="flex space-x-2">
         <button
           onClick={handleEditClick}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded"
@@ -58,7 +64,14 @@ const UserList = ({ user, onEdit, onDelete, onToggleBlock }) => {
           {user.isBlocked ? "Unblock" : "Block"}
         </button>
       </div>
-      {isEditing && <EditUserForm user={user} onClose={handleEditClose} />}
+      {isEditing && (
+        <EditUserForm
+          user={user}
+          onEdit={onEdit}
+          onClose={handleEditClose}
+          fetchUsers={fetchUsers}
+        />
+      )}
     </div>
   );
 };

@@ -3,7 +3,7 @@ import { useIndexedDB } from "react-indexed-db-hook";
 const USER_STORE = "user";
 
 export const useUserDB = () => {
-  const { add, update, getAll, getById, deleteRecord } =
+  const { add, update, getAll, getByID, deleteRecord } =
     useIndexedDB(USER_STORE);
 
   const checkIfEmailExists = async (email) => {
@@ -40,19 +40,15 @@ export const useUserDB = () => {
     }
   };
 
-  const getUserById = async (id) => {
-    try {
-      const user = await getById(id);
-      return user;
-    } catch (error) {
-      console.error("Error getting user by ID:", error);
-      throw error;
-    }
-  };
-
   const updateUser = async (id, userData) => {
     try {
-      await update({ id, ...userData });
+      const user = await getByID(id);
+      if (!user) {
+        throw new Error("User not found");
+      }
+      const updatedUser = { ...user, ...userData };
+      await update(updatedUser);
+
       console.log("User updated successfully");
     } catch (error) {
       console.error("Error updating user:", error);
@@ -70,19 +66,18 @@ export const useUserDB = () => {
     }
   };
 
-const toggleUserBlock = async (user) => {
-  try {
-    const updatedUser = { ...user, isBlocked: !user.isBlocked };  
-    const result = await update(updatedUser);
+  const toggleUserBlock = async (user) => {
+    try {
+      const updatedUser = { ...user, isBlocked: !user.isBlocked };
+      const result = await update(updatedUser);
 
-    console.log(result, "result");
-    console.log("User block status toggled successfully");
-  } catch (error) {
-    console.log("Error toggling user block status:", error);
-    throw error;
-  }
-};
-  
+      console.log(result, "result");
+      console.log("User block status toggled successfully");
+    } catch (error) {
+      console.log("Error toggling user block status:", error);
+      throw error;
+    }
+  };
 
   return {
     addUser,
@@ -90,6 +85,5 @@ const toggleUserBlock = async (user) => {
     updateUser,
     deleteUser,
     toggleUserBlock,
-    getUserById,
   };
 };
