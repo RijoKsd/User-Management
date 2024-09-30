@@ -27,7 +27,7 @@ const Login = () => {
     resolver: yupResolver(schema),
   });
 
-  const { getAllUsers } = useUserDB();
+  const { getAllUsers, updateLastLogin } = useUserDB();
   const onSubmit = async (data) => {
     try {
       const { email, password } = data;
@@ -49,6 +49,8 @@ const Login = () => {
 
       // localstorage
       localStorage.setItem("isLoggedIn", true);
+
+      await updateLastLogin(user.id);
 
       toast.success("Login successful");
       navigate("/user");

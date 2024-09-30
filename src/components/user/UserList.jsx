@@ -38,7 +38,7 @@ const UserList = ({ user, onEdit, onDelete, onToggleBlock, fetchUsers }) => {
         </span>
       </div>
       <div className="mb-4">
-       Register Date: {new Date(user.lastLogin).toLocaleString()}
+       Last Login: {new Date(user.lastLogin).toLocaleString()}
       </div>
       <div className="flex space-x-2">
         <button

@@ -79,11 +79,28 @@ export const useUserDB = () => {
     }
   };
 
+  const updateLastLogin = async (id) => {
+    try {
+      const user = await getByID(id);
+      if (!user) {
+        throw new Error("User not found");
+      }
+      const updatedUser = { ...user, lastLogin: new Date() };
+      await update(updatedUser);
+      console.log("User updated successfully");
+    } catch (error) {
+      console.error("Error updating user:", error);
+      throw error;
+    }
+
+  }
+
   return {
     addUser,
     getAllUsers,
     updateUser,
     deleteUser,
     toggleUserBlock,
+    updateLastLogin,
   };
 };
