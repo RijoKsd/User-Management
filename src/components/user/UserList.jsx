@@ -12,10 +12,6 @@ const UserList = ({ user, onEdit, onDelete, onToggleBlock }) => {
     setIsEditing(false);
   };
 
-  const handleUserUpdated = () => {
-    onEdit(user.id, user);
-  };
-
   return (
     <div className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-300">
       <div className="flex justify-between items-start mb-4">
@@ -52,7 +48,7 @@ const UserList = ({ user, onEdit, onDelete, onToggleBlock }) => {
           Delete
         </button>
         <button
-          onClick={() => onToggleBlock(user.id, !user.isBlocked)}
+          onClick={() => onToggleBlock(user)}
           className={`${
             user.isBlocked
               ? "bg-green-500 hover:bg-green-700"
@@ -62,13 +58,7 @@ const UserList = ({ user, onEdit, onDelete, onToggleBlock }) => {
           {user.isBlocked ? "Unblock" : "Block"}
         </button>
       </div>
-      {isEditing && (
-        <EditUserForm
-          user={user}
-          onClose={handleEditClose}
-          onUserUpdated={handleUserUpdated}
-        />
-      )}
+      {isEditing && <EditUserForm user={user} onClose={handleEditClose} />}
     </div>
   );
 };

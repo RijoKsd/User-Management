@@ -34,8 +34,7 @@ const Login = () => {
       const users = await getAllUsers();
       //decrypt password
       const user = users.find((user) => user.email === email);
-      console.log(user, "user");
-      if (!user) {
+       if (!user) {
         throw new Error("Invalid email");
       }
       const isPasswordMatch = await bcrypt.compare(password, user.password);
