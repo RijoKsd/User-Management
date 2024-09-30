@@ -25,20 +25,65 @@ export const useUserDB = () => {
     }
   };
 
- const addUser = async (userData) => {
-   // eslint-disable-next-line no-useless-catch
-   try {
-     const emailExists = await checkIfEmailExists(userData.email);
-     if (emailExists) {
-       throw new Error("Email already exists");
-     }
-     const id = await add(userData);
-     console.log("User added successfully", id);
-     return id;
-   } catch (error) {
-     throw error;  
-   }
- };
+  const addUser = async (userData) => {
+    // eslint-disable-next-line no-useless-catch
+    try {
+      const emailExists = await checkIfEmailExists(userData.email);
+      if (emailExists) {
+        throw new Error("Email already exists");
+      }
+      const id = await add(userData);
+      console.log("User added successfully", id);
+      return id;
+    } catch (error) {
+      throw error;
+    }
+  };
 
-  return { addUser, getAllUsers };
+  const getUserById = async (id) => {
+    try {
+      const user = await getById(id);
+      return user;
+    } catch (error) {
+      console.error("Error getting user by ID:", error);
+      throw error;
+    }
+  };
+
+  const updateUser = async (id, userData) => {
+   console.log(id, userData, "userData");
+  };
+
+  const deleteUser = async (id) => {
+    try {
+      await deleteRecord(id);
+      console.log("User deleted successfully");
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      throw error;
+    }
+  };
+
+const toggleUserBlock = async (user) => {
+  try {
+    const updatedUser = { ...user, isBlocked: !user.isBlocked };  
+    const result = await update(updatedUser);
+
+    console.log(result, "result");
+    console.log("User block status toggled successfully");
+  } catch (error) {
+    console.log("Error toggling user block status:", error);
+    throw error;
+  }
+};
+  
+
+  return {
+    addUser,
+    getAllUsers,
+    updateUser,
+    deleteUser,
+    toggleUserBlock,
+    getUserById,
+  };
 };

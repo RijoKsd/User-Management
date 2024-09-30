@@ -33,6 +33,7 @@ const Login = () => {
       const users = await getAllUsers();
       //decrypt password
       const user = users.find((user) => user.email === email);
+      console.log(user, "user");
       if (!user) {
         throw new Error("Invalid email");
       }
@@ -40,6 +41,10 @@ const Login = () => {
 
       if (!isPasswordMatch) {
         throw new Error("Incorrect password");
+      }
+
+      if (user.isBlocked) {
+        throw new Error("User is blocked");
       }
 
       toast.success("Login successful");
