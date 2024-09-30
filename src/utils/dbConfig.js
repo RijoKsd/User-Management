@@ -12,6 +12,8 @@ export const DBConfig = {
         { name: "password", keypath: "password", options: { unique: false } },
         { name: "isBlocked", keypath: "isBlocked", options: { unique: false } },
         { name: "lastLogin", keypath: "lastLogin", options: { unique: false } },
+        {name: "location", keypath: "location", options: {unique: false}},
+        {name: "jobTitle", keypath: "jobTitle", options: {unique: false}},
       ],
     },
   ],

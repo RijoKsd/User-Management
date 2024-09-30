@@ -1,6 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
+import EditUserForm from "./EditUserForm";
 
 const UserList = ({ user, onEdit, onDelete, onToggleBlock }) => {
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleEditClose = () => {
+    setIsEditing(false);
+  };
+
+  const handleUserUpdated = () => {
+    onEdit(user.id, user);
+  };
+
   return (
     <div className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-300">
       <div className="flex justify-between items-start mb-4">
@@ -25,7 +40,7 @@ const UserList = ({ user, onEdit, onDelete, onToggleBlock }) => {
       </p>
       <div className="flex justify-between items-center">
         <button
-          onClick={() => onEdit(user.id, user)}
+          onClick={handleEditClick}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded"
         >
           Edit
@@ -37,7 +52,7 @@ const UserList = ({ user, onEdit, onDelete, onToggleBlock }) => {
           Delete
         </button>
         <button
-          onClick={() => onToggleBlock(user )}
+          onClick={() => onToggleBlock(user.id, !user.isBlocked)}
           className={`${
             user.isBlocked
               ? "bg-green-500 hover:bg-green-700"
@@ -47,6 +62,13 @@ const UserList = ({ user, onEdit, onDelete, onToggleBlock }) => {
           {user.isBlocked ? "Unblock" : "Block"}
         </button>
       </div>
+      {isEditing && (
+        <EditUserForm
+          user={user}
+          onClose={handleEditClose}
+          onUserUpdated={handleUserUpdated}
+        />
+      )}
     </div>
   );
 };

@@ -6,6 +6,7 @@ import Register from "./components/auth/Register";
 import UserLayout from "./Layout/UserLayout";
 import UserManagement from "./components/user/UserManagement";
 import ProtectedRoute from "./components/common/ProtectedRoute";
+import EditUserForm from "./components/user/EditUserForm";
 
 const router = createBrowserRouter([
   {
