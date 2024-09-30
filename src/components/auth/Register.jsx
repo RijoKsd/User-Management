@@ -1,10 +1,12 @@
- 
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import bcrypt from "bcryptjs";
+import { useIndexedDB } from "react-indexed-db-hook";
+import { useUserDB } from "../../utils/db";
 
-// Define the schema for validation using Yup
+
 const schema = yup.object().shape({
   username: yup.string().required("Username is required"),
   email: yup
@@ -30,8 +32,23 @@ const Register = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data); 
+  const {addUser} = useUserDB();
+
+  const onSubmit = async(data) => {
+    try {
+      const hashedPassword = await bcrypt.hash(data.password, 10);
+      const userData = {
+        username: data.username,
+        email: data.email,
+        password: hashedPassword,
+        isBlocked: false,
+        lastLogin: new Date().toISOString()
+      }
+      const response = await addUser(userData);
+      console.log(response, "response")
+    } catch (error) {
+      console.error("ERror adding user", error);
+    }
   };
 
   return (
