@@ -1,8 +1,26 @@
-# React + Vite
+# UserFlow
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## User Management Application
 
-Currently, two official plugins are available:
+UserFlow is a comprehensive user management application built with React and IndexedDB. It provides a seamless interface for user authentication, registration, and management, styled with Tailwind CSS for a modern look and feel.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Features
+
+- User Authentication (Login)
+- User Registration
+- User Profile Updates
+- User Deletion
+- User Blocking/Unblocking
+- Responsive Design with Tailwind CSS
+- Local Data Storage with IndexedDB
+
+### Technologies Used
+
+- React.js
+- IndexedDB (for local data storage)
+- Tailwind CSS (for styling)
+- React Router (for navigation)
+- Yup (for form validation)
+- React Hook Form (for form handling)
+- Bcrypt.js (for password hashing)
+- React Hot Toast (for notifications)
